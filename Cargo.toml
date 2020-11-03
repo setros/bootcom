@@ -1,0 +1,36 @@
+[package]
+name = "bootcom"
+version = "0.1.0"
+authors = ["Abdessattar Sassi <457645+abdes@users.noreply.github.com>"]
+edition = "2018"
+description = "Push a Raspberry Pi image over a serial connection to the board."
+repository = "https://github.com/setros/bootcom"
+license = "MIT OR Apache-2.0"
+keywords = ["embedded", "Raspberry Pi", "bootloader", "bootimage", "kernel"]
+categories = [
+    "os",
+    "embedded",
+    "command-line-utilities",
+    "development-tools::testing",
+]
+
+[dependencies]
+serialport = { git = "https://gitlab.com/susurrus/serialport-rs" }
+ctrlc = "3.1.7"
+clap = "2.33.3"
+indicatif = "0.15.0"
+dialoguer = "0.7.1"
+console = "0.13"
+retry = "1.1.0"
+crossterm = "0.18"
+hexplay = "0.2.1"
+log = "0.4.11"
+simple_logger = "1.11.0"
+
+[lib]
+name = "bootcom"
+path = "src/lib.rs"
+
+[[bin]]
+name = "bootcom"
+path = "src/bin/cli.rs"
