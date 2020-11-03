@@ -1,16 +1,18 @@
 {
-    // Tells VSCode to defer to rust-analyzer's formatter (rustfmt) for rust
-    // code
-    "[rust]": {
-        "editor.defaultFormatter": "matklad.rust-analyzer" //
-    },
-    // Replaces the default `cargo check` command with `cargo clippy` on Rust
-    // file save
-    "rust-analyzer.checkOnSave.command": "clippy",
-    // For fun. Runs `cargo check --all-features`. You don't need this one.
-    "rust-analyzer.cargo.allFeatures": true,
-    // For fun. Enables the nightly updates channel for rust-analyzer since they
-    // ask nicely in their documentation. You don't need this one. You will be
-    // prompted to download the nightly install after save.
-    "rust-analyzer.updates.channel": "nightly",
+  // Tells VSCode to defer to rust-analyzer's formatter (rustfmt) for rust
+  // code
+  "[rust]": {
+    "editor.defaultFormatter": "matklad.rust-analyzer" //
+  },
+  // Do not run with with --all-targets as we have bare-metal projects
+  "rust-analyzer.checkOnSave.allTargets": false,
+  // Replaces the default `cargo check` command with `cargo clippy` on Rust file
+  // save
+  "rust-analyzer.checkOnSave.command": "clippy",
+  // `cargo check --all-features`
+  "rust-analyzer.cargo.allFeatures": true,
+  // For fun. Enables the nightly updates channel for rust-analyzer since they
+  // ask nicely in their documentation. You don't need this one. You will be
+  // prompted to download the nightly install after save.
+  "rust-analyzer.updates.channel": "nightly"
 }
