@@ -195,7 +195,7 @@ fn main() {
 
     // END - Arguments with default values =====================================
 
-    let mut settings = bc::SettingsBuilder::new()
+    let mut settings = bc::SettingsBuilder::default()
         .baud_rate(baud_rate)
         .data_bits(data_bits)
         .stop_bits(stop_bits)

@@ -46,7 +46,7 @@ pub(crate) fn select_port() -> Option<String> {
         found_ports = enumerate_usb_serial_ports();
         let num_ports = found_ports.len();
         if num_ports > 0 {
-            pb.finish_with_message(&format!("Select a port to be used:"));
+            pb.finish_with_message("Select a port to be used:");
             break;
         } else {
             let waited = attempt * waiting_period;
@@ -73,7 +73,7 @@ pub(crate) fn select_port() -> Option<String> {
             pb.finish_with_message(&format!("👍 Serial port {} is ready", style(path).green()));
         }
         None => {
-            pb.finish_with_message(&format!("❌ Selection canceled -> refreshing..."));
+            pb.finish_with_message("❌ Selection canceled -> refreshing...");
         }
     }
     selection
@@ -134,7 +134,7 @@ pub(crate) fn wait_for_port(path: &str) -> bool {
     // the completion from the main thread.
     let cancelation_thread = thread::spawn(move || loop {
         // Check if we need to terminate because the serial device is ready.
-        if let Ok(_) = done_rx.try_recv() {
+        if done_rx.try_recv().is_ok() {
             // Terminate
             break;
         }
@@ -294,13 +294,13 @@ pub(crate) fn open_and_setup_port(
 // Private stuff
 //==============================================================================
 
-fn check_requested_port(ports: &Vec<String>, path: &str) -> bool {
+fn check_requested_port(ports: &[String], path: &str) -> bool {
     for detected_port in ports {
         if detected_port.starts_with(path) {
             return true;
         }
     }
-    return false;
+    false
 }
 
 /// Enumerates serial devices of type USB on the system
@@ -336,7 +336,7 @@ fn enumerate_usb_serial_ports() -> Vec<String> {
     usb_ports
 }
 
-fn select_port_interactive(ports: &Vec<String>) -> Option<String> {
+fn select_port_interactive(ports: &[String]) -> Option<String> {
     use dialoguer::{theme::ColorfulTheme, Select};
 
     // If we are waiting specifically for a certain port (name in
@@ -356,7 +356,7 @@ fn select_port_interactive(ports: &Vec<String>) -> Option<String> {
     let selection = select.default(0).interact_on_opt(&term).unwrap();
     if let Some(selection) = selection {
         Some(String::from(
-            ports.get(selection).unwrap().split(":").next().unwrap(),
+            ports.get(selection).unwrap().split(':').next().unwrap(),
         ))
     } else {
         None

@@ -29,7 +29,7 @@ pub(crate) fn poll_escape() -> Result<bool> {
         } else if event
             == Event::Key(KeyEvent {
                 modifiers: KeyModifiers::CONTROL,
-                code: KeyCode::Char('c').into(),
+                code: KeyCode::Char('c'),
             })
         {
             // As we are in raw mode, Ctrl+C will be captured here as a key

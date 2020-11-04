@@ -35,13 +35,10 @@ impl SerialBootProtocol {
     pub fn run(&mut self) -> i8 {
         loop {
             self.sm = self.sm.step();
-            match &self.sm {
-                ProtocolStates::Done(sm) => {
-                    if sm.state.should_exit {
-                        return if sm.state.with_error { 1 } else { 0 };
-                    }
+            if let ProtocolStates::Done(sm) = &self.sm {
+                if sm.state.should_exit {
+                    return if sm.state.with_error { 1 } else { 0 };
                 }
-                _ => {}
             }
         }
     }

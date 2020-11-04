@@ -36,7 +36,7 @@ pub struct Settings {
     /// Restrict creation of `Settings` instances unless through the
     /// `SettingsBuilder`.
     #[doc(hidden)]
-    _private_use_builder: (),
+    private_use_builder__: (),
 }
 
 /// The builder for the `Settings` values.
@@ -55,7 +55,7 @@ pub struct SettingsBuilder {
 impl SettingsBuilder {
     /// Start building the settings using default values and no path for the
     /// port.
-    pub fn new() -> Self {
+    pub fn default() -> Self {
         SettingsBuilder {
             settings: Settings {
                 path: None,
@@ -65,7 +65,7 @@ impl SettingsBuilder {
                 parity: Parity::None,
                 stop_bits: StopBits::One,
                 kernel_image: None,
-                _private_use_builder: (),
+                private_use_builder__: (),
             },
         }
     }

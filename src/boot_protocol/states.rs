@@ -139,9 +139,9 @@ impl Runnable for TerminalModeState {
                                         .cloned()
                                         .collect();
 
-                                    if command == &[3, 3, 3] {
+                                    if command == [3, 3, 3] {
                                         // We got a `send_kernel` command
-                                        t = t - 3;
+                                        t -= 3;
                                         send_kernel = true;
                                     }
 
@@ -183,7 +183,7 @@ impl Runnable for TerminalModeState {
             if send_kernel {
                 return Event::SwitchToKernelSendMode(SwitchToKernelSendModeEvent {
                     settings: settings.clone(),
-                    port: port,
+                    port,
                 });
             }
 

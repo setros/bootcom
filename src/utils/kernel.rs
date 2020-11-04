@@ -117,15 +117,15 @@ fn write_kernel_size(port: &mut Box<dyn SerialPort>, size: u32) -> Result<(), Bo
                     .finish();
                 println!("{}", view);
             }
-            return Ok(());
+            Ok(())
         }
         _ => {
             info!("error: {:?}", result.unwrap_err());
-            return Err(serialport::Error {
+            Err(serialport::Error {
                 kind: serialport::ErrorKind::InvalidInput,
                 description: "kernel size was not confirmed with `OK`".into(),
             }
-            .into());
+            .into())
         }
     }
 }
@@ -148,7 +148,7 @@ fn write_kernel_image(
         let bytes_out = port.write(&chunk[..bytes_in])?;
         assert_eq!(bytes_in, bytes_out);
 
-        written = written + bytes_in;
+        written += bytes_in;
         pb.set_position(written.try_into().unwrap());
     }
     pb.finish_with_message("[BC] Kernel uploaded");
@@ -170,7 +170,7 @@ fn select_image_file_interactive() -> Option<String> {
                     items.push(name.to_str().unwrap().into());
                 });
 
-            if items.len() == 0 {
+            if items.is_empty() {
                 debug!("There are no image files in the current directory");
             }
 

@@ -82,13 +82,10 @@ impl DeviceManager for SingletonReader {
         loop {
             let mut data = self.inner.lock().unwrap();
             *data = data.step();
-            match &*data {
-                DeviceManagerStates::Done(sm) => {
-                    if sm.state.should_exit {
-                        return if sm.state.with_error { 1 } else { 0 };
-                    }
+            if let DeviceManagerStates::Done(sm) = &*data {
+                if sm.state.should_exit {
+                    return if sm.state.with_error { 1 } else { 0 };
                 }
-                _ => {}
             }
         }
     }
