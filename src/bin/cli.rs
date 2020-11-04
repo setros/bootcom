@@ -8,9 +8,8 @@ use clap::{
 use console::style;
 use log::{debug, trace, LevelFilter};
 use serialport::{DataBits, FlowControl, Parity, StopBits};
-use simple_logger::SimpleLogger;
+use simplelog::*;
 
-use bootcom;
 use bootcom::{self as bc, DeviceManager};
 
 fn main() {
@@ -139,10 +138,10 @@ fn main() {
         0 => log_level = LevelFilter::Warn,
         1 => log_level = LevelFilter::Info,
         2 => log_level = LevelFilter::Debug,
-        3 | _ => log_level = LevelFilter::Trace,
+        _ => log_level = LevelFilter::Trace,
     }
 
-    SimpleLogger::new().with_level(log_level).init().unwrap();
+    TermLogger::init(log_level, Config::default(), TerminalMode::Mixed).unwrap();
 
     trace!("{:#?}", matches);
 

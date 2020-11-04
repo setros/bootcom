@@ -16,16 +16,16 @@ categories = [
 
 [dependencies]
 serialport = { git = "https://gitlab.com/susurrus/serialport-rs" }
-ctrlc = "3.1.7"
-clap = "2.33.3"
-indicatif = "0.15.0"
-dialoguer = "0.7.1"
-console = "0.13"
-retry = "1.1.0"
-crossterm = "0.18"
-hexplay = "0.2.1"
-log = "0.4.11"
-simple_logger = "1.11.0"
+ctrlc = "^3.1.7"
+clap = "^2.33.3"
+indicatif = "~0.15.0"
+dialoguer = "~0.7.1"
+console = "~0.13.0"
+retry = "^1.1.0"
+crossterm = "~0.18.2"
+hexplay = "~0.2.1"
+log = "~0.4.11"
+simplelog = "~0.8.0"
 
 [lib]
 name = "bootcom"
@@ -34,3 +34,6 @@ path = "src/lib.rs"
 [[bin]]
 name = "bootcom"
 path = "src/bin/cli.rs"
+
+[build-dependencies]
+cargo-watch = "^7.5.0"
