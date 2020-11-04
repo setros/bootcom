@@ -4,13 +4,9 @@
   "[rust]": {
     "editor.defaultFormatter": "matklad.rust-analyzer" //
   },
-  // Do not run with with --all-targets as we have bare-metal projects
-  "rust-analyzer.checkOnSave.allTargets": false,
-  // Replaces the default `cargo check` command with `cargo clippy` on Rust file
-  // save
-  "rust-analyzer.checkOnSave.command": "clippy",
-  // `cargo check --all-features`
-  "rust-analyzer.cargo.allFeatures": true,
+  // Disable the built-in "rust check" in rust_analyzer and use our own Makefile
+  // for that to take into account the different flags and logic for cargo.
+  "rust-analyzer.checkOnSave.enable": false,
   // For fun. Enables the nightly updates channel for rust-analyzer since they
   // ask nicely in their documentation. You don't need this one. You will be
   // prompted to download the nightly install after save.
