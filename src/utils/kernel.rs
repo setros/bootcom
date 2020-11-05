@@ -7,7 +7,7 @@ use std::{error::Error, fs::File};
 use console::{style, Term};
 use dialoguer::{theme::ColorfulTheme, Select};
 use indicatif::{ProgressBar, ProgressStyle};
-use log::{debug, info, log_enabled, trace, Level::Debug};
+use log::{debug, error, info, log_enabled, trace, Level::Debug};
 use serialport::{ClearBuffer, SerialPort};
 
 use hexplay::HexViewBuilder;
@@ -145,11 +145,27 @@ fn write_kernel_image(
 
     while (written as u32) < size {
         let bytes_in = file.read(&mut chunk)?;
-        let bytes_out = port.write(&chunk[..bytes_in])?;
-        assert_eq!(bytes_in, bytes_out);
+        trace!("{} bytes read from input file", { bytes_in });
+        loop {
+            match port.write(&chunk[..bytes_in]) {
+                Ok(bytes_out) => {
+                    trace!("{} bytes written to serial port", { bytes_out });
+                    assert_eq!(bytes_in, bytes_out);
 
-        written += bytes_in;
-        pb.set_position(written.try_into().unwrap());
+                    written += bytes_in;
+                    pb.set_position(written.try_into().unwrap());
+                    break;
+                }
+                Err(err) => {
+                    if err.kind() == std::io::ErrorKind::TimedOut {
+                    } else {
+                        error!("{}", err);
+                        return Err(err.into());
+                    }
+                }
+            }
+            std::thread::sleep(std::time::Duration::from_millis(50));
+        }
     }
     pb.finish_with_message("[BC] Kernel uploaded");
 
