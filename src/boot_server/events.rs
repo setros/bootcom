@@ -106,7 +106,7 @@ pub(crate) struct DoneEvent {
 /// ```no_run
 /// use bootcom::{self as bc, DeviceManager};
 ///
-/// let settings = bc::SettingsBuilder::new().finalize();
+/// let settings = bc::SettingsBuilder::default().finalize();
 /// let mut sdm = bc::singleton(settings);
 /// let status = sdm.run(); // status code returned after the `Exit` event
 /// println!("status: {}", status);

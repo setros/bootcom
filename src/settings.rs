@@ -47,7 +47,7 @@ pub struct Settings {
 /// **Example**
 ///
 /// ```ignore
-/// let settings = SettingsBuilder::new().path("/dev/ttyUSB0").finalize();
+/// let settings = SettingsBuilder::default().path("/dev/ttyUSB0").finalize();
 /// ```
 pub struct SettingsBuilder {
     settings: Settings,
@@ -123,7 +123,7 @@ impl SettingsBuilder {
 
 #[test]
 fn all_default() {
-    let settings = SettingsBuilder::new().finalize();
+    let settings = SettingsBuilder::default().finalize();
     assert_eq!(
         settings,
         Settings {
@@ -134,55 +134,55 @@ fn all_default() {
             parity: Parity::None,
             stop_bits: StopBits::One,
             kernel_image: None,
-            _private_use_builder: (),
+            private_use_builder__: (),
         }
     )
 }
 
 #[test]
 fn path() {
-    let settings = SettingsBuilder::new().path("/dev/ttyUSB0").finalize();
+    let settings = SettingsBuilder::default().path("/dev/ttyUSB0").finalize();
     assert_eq!(settings.path.unwrap(), "/dev/ttyUSB0");
 }
 
 #[test]
 fn baud_rate() {
     let baud_rate = 96_000;
-    let settings = SettingsBuilder::new().baud_rate(baud_rate).finalize();
+    let settings = SettingsBuilder::default().baud_rate(baud_rate).finalize();
     assert_eq!(settings.baud_rate, baud_rate);
 }
 
 #[test]
 fn data_bits() {
     let data_bits = DataBits::Seven;
-    let settings = SettingsBuilder::new().data_bits(data_bits).finalize();
+    let settings = SettingsBuilder::default().data_bits(data_bits).finalize();
     assert_eq!(settings.data_bits, data_bits);
 }
 
 #[test]
 fn flow_control() {
     let flow_control = FlowControl::Hardware;
-    let settings = SettingsBuilder::new().flow_control(flow_control).finalize();
+    let settings = SettingsBuilder::default().flow_control(flow_control).finalize();
     assert_eq!(settings.flow_control, flow_control);
 }
 
 #[test]
 fn stop_bits() {
     let stop_bits = StopBits::Two;
-    let settings = SettingsBuilder::new().stop_bits(stop_bits).finalize();
+    let settings = SettingsBuilder::default().stop_bits(stop_bits).finalize();
     assert_eq!(settings.stop_bits, stop_bits);
 }
 
 #[test]
 fn parity() {
     let parity = Parity::Even;
-    let settings = SettingsBuilder::new().parity(parity).finalize();
+    let settings = SettingsBuilder::default().parity(parity).finalize();
     assert_eq!(settings.parity, parity);
 }
 
 #[test]
 fn kernel_image() {
-    let settings = SettingsBuilder::new()
+    let settings = SettingsBuilder::default()
         .kernel_image("test_kernel8.img")
         .finalize();
     assert_eq!(settings.kernel_image.unwrap(), "test_kernel8.img");
