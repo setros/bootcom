@@ -6,7 +6,7 @@
   },
   // Disable the built-in "rust check" in rust_analyzer and use our own Makefile
   // for that to take into account the different flags and logic for cargo.
-  "rust-analyzer.checkOnSave.enable": false,
+  "rust-analyzer.checkOnSave.enable": true,
   // For fun. Enables the nightly updates channel for rust-analyzer since they
   // ask nicely in their documentation. You don't need this one. You will be
   // prompted to download the nightly install after save.
