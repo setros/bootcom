@@ -1,5 +1,11 @@
 {
         "recommendations": [
+                "tamasfe.even-better-toml",
+                "serayuzgur.crates",
+                "donjayamanne.githistory",
+                "eamodio.gitlens",
+                "lextudio.restructuredtext",
+                "kevinkyang.auto-comment-blocks",
                 "matklad.rust-analyzer"
         ]
 }

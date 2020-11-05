@@ -2,17 +2,19 @@
     // See https://go.microsoft.com/fwlink/?LinkId=733558
     // for the documentation about the tasks.json format
     "version": "2.0.0",
-    "tasks": [
-        {
-            "label": "Watch",
-            "group": "build",
-            "type": "shell",
-            "command": "cargo watch ---shell \"cargo clippy\"",
-            "problemMatcher": "$rustc-watch",
-            "isBackground": true,
-            "runOptions": {
-                "runOn": "folderOpen"
-            }
-        }
-    ]
+    // "tasks": [
+    // This task can be used as a replacement to the built-in check in rust 
+    // analyzer if need to customize that.
+    //     {
+    //         "label": "Watch",
+    //         "group": "build",
+    //         "type": "shell",
+    //         "command": "cargo watch ---shell \"cargo clippy\"",
+    //         "problemMatcher": "$rustc-watch",
+    //         "isBackground": true,
+    //         "runOptions": {
+    //             "runOn": "folderOpen"
+    //         }
+    //     }
+    // ]
 }
