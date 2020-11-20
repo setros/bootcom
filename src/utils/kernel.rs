@@ -136,7 +136,7 @@ fn write_kernel_image(
     size: u32,
 ) -> Result<(), serialport::Error> {
     let mut written: usize = 0;
-    let mut chunk: Vec<u8> = vec![0; 512];
+    let mut chunk: Vec<u8> = vec![0; 1024];
 
     let pb = ProgressBar::new(size.into());
     pb.set_style(ProgressStyle::default_bar()
