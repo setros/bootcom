@@ -110,7 +110,7 @@ pub fn singleton(settings: Settings) -> SingletonReader {
         DM_ONCE.call_once(|| {
             // Make it
             let singleton = SingletonReader {
-                inner: Arc::new(Mutex::new(DeviceManagerStates::Init(DeviceManagerSM::new(
+                inner: Arc::new(Mutex::new(DeviceManagerStates::Init(DeviceManagerStateMachine::new(
                     settings,
                 )))),
             };
@@ -141,20 +141,20 @@ pub fn singleton(settings: Settings) -> SingletonReader {
 /// etc...). Additionally, it's nicer when debugging to see the state machine
 /// and the current state it is holding at any time.
 #[derive(Debug)]
-struct DeviceManagerSM<S: Runnable> {
+struct DeviceManagerStateMachine<S: Runnable> {
     settings: Settings,
     state: S,
 }
-impl<S: Runnable> DeviceManagerSM<S> {
+impl<S: Runnable> DeviceManagerStateMachine<S> {
     fn run(&mut self) -> Event {
         self.state.run(&self.settings)
     }
 }
 
 /// The device management state machine starts in the `InitState`.
-impl DeviceManagerSM<InitState> {
+impl DeviceManagerStateMachine<InitState> {
     fn new(settings: Settings) -> Self {
-        DeviceManagerSM {
+        DeviceManagerStateMachine {
             settings,
             state: InitState {},
         }
@@ -164,11 +164,11 @@ impl DeviceManagerSM<InitState> {
 /// Wraps the state machine and its various states into a simple enum, which can
 /// also be used for pattern matching during state transitions.
 enum DeviceManagerStates {
-    Init(DeviceManagerSM<InitState>),
-    WaitForPort(DeviceManagerSM<WaitForPortState>),
-    SelectPort(DeviceManagerSM<SelectPortState>),
-    Service(DeviceManagerSM<ServiceState>),
-    Done(DeviceManagerSM<DoneState>),
+    Init(DeviceManagerStateMachine<InitState>),
+    WaitForPort(DeviceManagerStateMachine<WaitForPortState>),
+    SelectPort(DeviceManagerStateMachine<SelectPortState>),
+    Service(DeviceManagerStateMachine<ServiceState>),
+    Done(DeviceManagerStateMachine<DoneState>),
 }
 impl DeviceManagerStates {
     fn step(&mut self) -> Self {
@@ -220,20 +220,20 @@ impl DeviceManagerStates {
 // State from Event transitions
 // -----------------------------------------------------------------------------
 
-impl From<WaitForPortEvent> for DeviceManagerSM<WaitForPortState> {
-    fn from(event: WaitForPortEvent) -> DeviceManagerSM<WaitForPortState> {
+impl From<WaitForPortEvent> for DeviceManagerStateMachine<WaitForPortState> {
+    fn from(event: WaitForPortEvent) -> DeviceManagerStateMachine<WaitForPortState> {
         // ... Logic prior to transition
-        DeviceManagerSM {
+        DeviceManagerStateMachine {
             // ... attr: val.attr
             settings: event.settings,
             state: WaitForPortState {},
         }
     }
 }
-impl From<PortErrorEvent> for DeviceManagerSM<WaitForPortState> {
-    fn from(event: PortErrorEvent) -> DeviceManagerSM<WaitForPortState> {
+impl From<PortErrorEvent> for DeviceManagerStateMachine<WaitForPortState> {
+    fn from(event: PortErrorEvent) -> DeviceManagerStateMachine<WaitForPortState> {
         // ... Logic prior to transition
-        DeviceManagerSM {
+        DeviceManagerStateMachine {
             // ... attr: val.attr
             settings: event.settings,
             state: WaitForPortState {},
@@ -241,10 +241,10 @@ impl From<PortErrorEvent> for DeviceManagerSM<WaitForPortState> {
     }
 }
 
-impl From<SelectPortEvent> for DeviceManagerSM<SelectPortState> {
-    fn from(event: SelectPortEvent) -> DeviceManagerSM<SelectPortState> {
+impl From<SelectPortEvent> for DeviceManagerStateMachine<SelectPortState> {
+    fn from(event: SelectPortEvent) -> DeviceManagerStateMachine<SelectPortState> {
         // ... Logic prior to transition
-        DeviceManagerSM {
+        DeviceManagerStateMachine {
             // ... attr: val.attr
             settings: event.settings,
             state: SelectPortState {},
@@ -252,10 +252,10 @@ impl From<SelectPortEvent> for DeviceManagerSM<SelectPortState> {
     }
 }
 
-impl From<PortReadyEvent> for DeviceManagerSM<ServiceState> {
-    fn from(event: PortReadyEvent) -> DeviceManagerSM<ServiceState> {
+impl From<PortReadyEvent> for DeviceManagerStateMachine<ServiceState> {
+    fn from(event: PortReadyEvent) -> DeviceManagerStateMachine<ServiceState> {
         // ... Logic prior to transition
-        DeviceManagerSM {
+        DeviceManagerStateMachine {
             // ... attr: val.attr
             settings: event.settings,
             state: ServiceState {},
@@ -263,10 +263,10 @@ impl From<PortReadyEvent> for DeviceManagerSM<ServiceState> {
     }
 }
 
-impl From<DoneEvent> for DeviceManagerSM<DoneState> {
-    fn from(event: DoneEvent) -> DeviceManagerSM<DoneState> {
+impl From<DoneEvent> for DeviceManagerStateMachine<DoneState> {
+    fn from(event: DoneEvent) -> DeviceManagerStateMachine<DoneState> {
         // ... Logic prior to transition
-        DeviceManagerSM {
+        DeviceManagerStateMachine {
             // ... attr: val.attr
             settings: event.settings,
             state: DoneState {
@@ -276,10 +276,10 @@ impl From<DoneEvent> for DeviceManagerSM<DoneState> {
         }
     }
 }
-impl From<ExitEvent> for DeviceManagerSM<DoneState> {
-    fn from(event: ExitEvent) -> DeviceManagerSM<DoneState> {
+impl From<ExitEvent> for DeviceManagerStateMachine<DoneState> {
+    fn from(event: ExitEvent) -> DeviceManagerStateMachine<DoneState> {
         // ... Logic prior to transition
-        DeviceManagerSM {
+        DeviceManagerStateMachine {
             // ... attr: val.attr
             settings: event.settings,
             state: DoneState {

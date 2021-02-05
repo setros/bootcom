@@ -50,7 +50,7 @@ impl SerialBootProtocol {
 pub fn factory(settings: Settings) -> SerialBootProtocol {
     SerialBootProtocol {
         // The same machine naturally starts in the `Init` state.
-        sm: ProtocolStates::Init(ProtocolSM::new(settings)),
+        sm: ProtocolStates::Init(ProtocolStateMachine::new(settings)),
     }
 }
 
@@ -69,20 +69,20 @@ pub fn factory(settings: Settings) -> SerialBootProtocol {
 /// etc...). Additionally, it's nicer when debugging to see the state machine
 /// and the current state it is holding at any time.
 #[derive(Debug)]
-struct ProtocolSM<S: Runnable> {
+struct ProtocolStateMachine<S: Runnable> {
     settings: Settings,
     state: S,
 }
-impl<S: Runnable> ProtocolSM<S> {
+impl<S: Runnable> ProtocolStateMachine<S> {
     fn run(&mut self) -> Event {
         self.state.run(&self.settings)
     }
 }
 
 /// The state machine starts in the `InitState`.
-impl ProtocolSM<InitState> {
+impl ProtocolStateMachine<InitState> {
     fn new(settings: Settings) -> Self {
-        ProtocolSM {
+        ProtocolStateMachine {
             settings,
             state: InitState {},
         }
@@ -93,10 +93,10 @@ impl ProtocolSM<InitState> {
 /// provides a simpler and more intuitive model for manipulating states and
 /// their transitions.
 enum ProtocolStates {
-    Init(ProtocolSM<InitState>),
-    TerminalMode(ProtocolSM<TerminalModeState>),
-    KernelSendMode(ProtocolSM<KernelSendModeState>),
-    Done(ProtocolSM<DoneState>),
+    Init(ProtocolStateMachine<InitState>),
+    TerminalMode(ProtocolStateMachine<TerminalModeState>),
+    KernelSendMode(ProtocolStateMachine<KernelSendModeState>),
+    Done(ProtocolStateMachine<DoneState>),
 }
 impl ProtocolStates {
     /// The unit of work in the state machine event loop. It checks the current
@@ -145,10 +145,10 @@ impl ProtocolStates {
 // State from Event transitions
 // -----------------------------------------------------------------------------
 
-impl From<SwitchToTerminalModeEvent> for ProtocolSM<TerminalModeState> {
-    fn from(event: SwitchToTerminalModeEvent) -> ProtocolSM<TerminalModeState> {
+impl From<SwitchToTerminalModeEvent> for ProtocolStateMachine<TerminalModeState> {
+    fn from(event: SwitchToTerminalModeEvent) -> ProtocolStateMachine<TerminalModeState> {
         // ... Logic prior to transition
-        ProtocolSM {
+        ProtocolStateMachine {
             // ... attr: val.attr
             settings: event.settings,
             state: TerminalModeState {
@@ -158,10 +158,10 @@ impl From<SwitchToTerminalModeEvent> for ProtocolSM<TerminalModeState> {
     }
 }
 
-impl From<SwitchToKernelSendModeEvent> for ProtocolSM<KernelSendModeState> {
-    fn from(event: SwitchToKernelSendModeEvent) -> ProtocolSM<KernelSendModeState> {
+impl From<SwitchToKernelSendModeEvent> for ProtocolStateMachine<KernelSendModeState> {
+    fn from(event: SwitchToKernelSendModeEvent) -> ProtocolStateMachine<KernelSendModeState> {
         // ... Logic prior to transition
-        ProtocolSM {
+        ProtocolStateMachine {
             // ... attr: val.attr
             settings: event.settings,
             state: KernelSendModeState {
@@ -171,10 +171,10 @@ impl From<SwitchToKernelSendModeEvent> for ProtocolSM<KernelSendModeState> {
     }
 }
 
-impl From<DoneEvent> for ProtocolSM<DoneState> {
-    fn from(event: DoneEvent) -> ProtocolSM<DoneState> {
+impl From<DoneEvent> for ProtocolStateMachine<DoneState> {
+    fn from(event: DoneEvent) -> ProtocolStateMachine<DoneState> {
         // ... Logic prior to transition
-        ProtocolSM {
+        ProtocolStateMachine {
             // ... attr: val.attr
             settings: event.settings,
             state: DoneState {
@@ -184,10 +184,10 @@ impl From<DoneEvent> for ProtocolSM<DoneState> {
         }
     }
 }
-impl From<ExitEvent> for ProtocolSM<DoneState> {
-    fn from(event: ExitEvent) -> ProtocolSM<DoneState> {
+impl From<ExitEvent> for ProtocolStateMachine<DoneState> {
+    fn from(event: ExitEvent) -> ProtocolStateMachine<DoneState> {
         // ... Logic prior to transition
-        ProtocolSM {
+        ProtocolStateMachine {
             // ... attr: val.attr
             settings: event.settings,
             state: DoneState {
