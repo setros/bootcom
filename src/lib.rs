@@ -43,8 +43,6 @@
 //! is implemented are authorized and any other transition would be detected at
 //! compile-time as an error.
 
-#![feature(in_band_lifetimes)]
-
 mod boot_protocol;
 mod boot_server;
 mod settings;
