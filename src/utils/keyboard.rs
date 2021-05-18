@@ -1,4 +1,4 @@
-use std::io::{stdout, Write};
+use std::io::stdout;
 use std::{process, time::Duration};
 
 use crossterm::{

@@ -141,7 +141,13 @@ fn main() {
         _ => log_level = LevelFilter::Trace,
     }
 
-    TermLogger::init(log_level, Config::default(), TerminalMode::Mixed).unwrap();
+    TermLogger::init(
+        log_level,
+        Config::default(),
+        TerminalMode::Mixed,
+        ColorChoice::Auto,
+    )
+    .unwrap();
 
     trace!("{:#?}", matches);
 

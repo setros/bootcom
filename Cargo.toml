@@ -15,17 +15,18 @@ categories = [
 ]
 
 [dependencies]
-serialport = { git = "https://gitlab.com/susurrus/serialport-rs" }
-ctrlc = "^3.1.7"
-clap = "^2.33.3"
-indicatif = "~0.15.0"
-dialoguer = "~0.7.1"
-console = "~0.13.0"
-retry = "^1.1.0"
-crossterm = "~0.18.2"
+#serialport = { git = "https://gitlab.com/susurrus/serialport-rs" }
+serialport = "~4.0.1"
+ctrlc = "~3.1.7"
+clap = "~2.33.3"
+indicatif = "~0.16.0"
+dialoguer = "~0.8.0"
+console = "~0.14.1"
+retry = "~1.2.0"
+crossterm = "~0.19.0"
 hexplay = "~0.2.1"
 log = "~0.4.11"
-simplelog = "~0.8.0"
+simplelog = "~0.10.0"
 
 [lib]
 name = "bootcom"

@@ -162,7 +162,9 @@ fn data_bits() {
 #[test]
 fn flow_control() {
     let flow_control = FlowControl::Hardware;
-    let settings = SettingsBuilder::default().flow_control(flow_control).finalize();
+    let settings = SettingsBuilder::default()
+        .flow_control(flow_control)
+        .finalize();
     assert_eq!(settings.flow_control, flow_control);
 }
 

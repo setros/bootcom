@@ -50,7 +50,7 @@ pub(crate) fn select_port() -> Option<String> {
             break;
         } else {
             let waited = attempt * waiting_period;
-            pb.set_message(&format!(
+            pb.set_message(format!(
                 "[{:03}s {}] ⌛ Waiting for USB serial controller to be connected...",
                 style(waited).dim(),
                 num_ports
@@ -70,7 +70,7 @@ pub(crate) fn select_port() -> Option<String> {
     let selection = select_port_interactive(&found_ports);
     match &selection {
         Some(path) => {
-            pb.finish_with_message(&format!("👍 Serial port {} is ready", style(path).green()));
+            pb.finish_with_message(format!("👍 Serial port {} is ready", style(path).green()));
         }
         None => {
             pb.finish_with_message("❌ Selection canceled -> refreshing...");
@@ -101,7 +101,7 @@ pub(crate) fn wait_for_port(path: &str) -> bool {
     let mut attempt: usize = 1;
     let waiting_period = 2;
 
-    pb.set_message(&format!(
+    pb.set_message(format!(
         "[{:03}s {}] ⏳ Waiting for {} to be ready (ESC to cancel)...",
         style(waiting_period).dim(),
         found_ports.len(),
@@ -162,7 +162,7 @@ pub(crate) fn wait_for_port(path: &str) -> bool {
                 .send(1)
                 .expect("an unrecoverable error while sending over done_tx");
 
-            pb.finish_with_message(&format!("👍 Serial port {} is ready", style(path).green()));
+            pb.finish_with_message(format!("👍 Serial port {} is ready", style(path).green()));
             break;
         }
 
@@ -171,7 +171,7 @@ pub(crate) fn wait_for_port(path: &str) -> bool {
         // devices again.
         let num_ports = found_ports.len();
         let waited = attempt * waiting_period;
-        pb.set_message(&format!(
+        pb.set_message(format!(
             "[{:03}s {}] ⏳ Waiting for {} to be ready (ESC to cancel)...",
             style(waited).dim(),
             num_ports,
@@ -181,7 +181,7 @@ pub(crate) fn wait_for_port(path: &str) -> bool {
         match cancel_rx.recv_timeout(Duration::from_secs(waiting_period as u64)) {
             Ok(_) => {
                 // we got cancelled
-                pb.finish_with_message(&format!(
+                pb.finish_with_message(format!(
                     "❌ Waiting on port {} canceled after {} seconds",
                     style(path).cyan(),
                     style(waited).dim()
@@ -354,11 +354,5 @@ fn select_port_interactive(ports: &[String]) -> Option<String> {
     }
 
     let selection = select.default(0).interact_on_opt(&term).unwrap();
-    if let Some(selection) = selection {
-        Some(String::from(
-            ports.get(selection).unwrap().split(':').next().unwrap(),
-        ))
-    } else {
-        None
-    }
+    selection.map(|x| String::from(ports.get(x).unwrap().split(':').next().unwrap()))
 }

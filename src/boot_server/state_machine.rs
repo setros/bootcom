@@ -110,9 +110,9 @@ pub fn singleton(settings: Settings) -> SingletonReader {
         DM_ONCE.call_once(|| {
             // Make it
             let singleton = SingletonReader {
-                inner: Arc::new(Mutex::new(DeviceManagerStates::Init(DeviceManagerStateMachine::new(
-                    settings,
-                )))),
+                inner: Arc::new(Mutex::new(DeviceManagerStates::Init(
+                    DeviceManagerStateMachine::new(settings),
+                ))),
             };
 
             // Put it in the heap so it can outlive this call
