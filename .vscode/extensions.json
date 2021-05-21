@@ -1,5 +1,6 @@
 {
         "recommendations": [
+                "stkb.rewrap",
                 "tamasfe.even-better-toml",
                 "serayuzgur.crates",
                 "donjayamanne.githistory",
